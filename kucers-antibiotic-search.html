@@ -6,562 +6,101 @@
 <title>Kucers' Antimicrobial Reference</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
   :root {
-    --bg: #0e0f0d;
-    --surface: #161714;
-    --surface2: #1e1f1c;
-    --border: #2a2b28;
-    --text: #e8e4dc;
-    --text-muted: #7a7870;
-    --text-dim: #4a4b48;
-    --accent: #c9a84c;
-    --accent-dim: #8a6e2e;
+    --bg: #0e0f0d; --surface: #161714; --surface2: #1e1f1c;
+    --border: #2a2b28; --text: #e8e4dc; --text-muted: #7a7870;
+    --text-dim: #4a4b48; --accent: #c9a84c; --accent-dim: #8a6e2e;
     --accent-glow: rgba(201,168,76,0.12);
-    --red: #c0392b;
-    --green: #2e7d52;
-    --blue: #1a4a6b;
-    --purple: #4a2c6b;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Source Serif 4', Georgia, serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* ── HEADER ── */
-  header {
-    padding: 32px 48px 24px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: flex-end;
-    gap: 24px;
-    flex-wrap: wrap;
-    background: linear-gradient(180deg, #111210 0%, transparent 100%);
-  }
-
-  .logo-block { flex: 1; min-width: 260px; }
-
-  .logo-eyebrow {
-    font-size: 10px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 6px;
-    font-family: 'Source Serif 4', serif;
-    font-weight: 300;
-  }
-
-  h1 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(22px, 3vw, 32px);
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: -0.5px;
-    line-height: 1.15;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: 'Source Serif 4', Georgia, serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+  header { padding: 16px 36px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 20px; flex-wrap: wrap; background: var(--surface); flex-shrink: 0; }
+  .logo-block { flex: 1; min-width: 200px; }
+  .logo-eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 3px; font-weight: 300; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(16px, 2vw, 24px); font-weight: 600; color: var(--text); }
   h1 span { color: var(--accent); }
+  .stats-row { display: flex; gap: 12px; }
+  .stat { text-align: center; padding: 7px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface2); }
+  .stat-n { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 2px; font-weight: 300; }
+  .app { display: flex; flex: 1; overflow: hidden; }
 
-  .logo-sub {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 5px;
-    font-style: italic;
-    font-weight: 300;
-  }
-
-  .stats-row {
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-
-  .stat {
-    text-align: center;
-    padding: 10px 16px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--surface);
-  }
-
-  .stat-n {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color: var(--accent);
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-size: 10px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-top: 3px;
-    font-weight: 300;
-  }
-
-  /* ── LAYOUT ── */
-  .app {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-    height: calc(100vh - 110px);
-  }
-
-  /* ── LEFT PANEL ── */
-  .panel-left {
-    width: 380px;
-    min-width: 320px;
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    background: var(--surface);
-  }
-
-  .search-bar {
-    padding: 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface2);
-  }
-
-  .search-wrap {
-    position: relative;
-  }
-
-  .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--accent-dim);
-    font-size: 16px;
-    pointer-events: none;
-  }
-
-  #searchInput {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px 36px 10px 36px;
-    color: var(--text);
-    font-family: 'Source Serif 4', serif;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
+  /* LEFT */
+  .panel-left { width: 320px; min-width: 260px; border-right: 1px solid var(--border); display: flex; flex-direction: column; background: var(--surface); flex-shrink: 0; }
+  .search-bar { padding: 10px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+  .search-wrap { position: relative; }
+  .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--accent-dim); font-size: 15px; pointer-events: none; }
+  #searchInput { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px 30px 8px 30px; color: var(--text); font-family: 'Source Serif 4', serif; font-size: 13px; outline: none; transition: border-color 0.2s; }
   #searchInput:focus { border-color: var(--accent-dim); }
   #searchInput::placeholder { color: var(--text-dim); font-style: italic; }
-
-  .clear-btn {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: var(--text-dim);
-    border: none;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    color: var(--bg);
-    font-size: 10px;
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-  }
-
+  .clear-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: var(--text-dim); border: none; border-radius: 50%; width: 16px; height: 16px; color: var(--bg); font-size: 9px; cursor: pointer; display: none; align-items: center; justify-content: center; }
   .clear-btn.visible { display: flex; }
-
-  .filter-row {
-    display: flex;
-    gap: 6px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-  }
-
-  .filter-chip {
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-family: 'Source Serif 4', serif;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-
-  .filter-chip:hover,
-  .filter-chip.active {
-    background: var(--accent-glow);
-    border-color: var(--accent-dim);
-    color: var(--accent);
-  }
-
-  /* Results list */
-  .results-header {
-    padding: 10px 16px 6px;
-    font-size: 10px;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    font-weight: 300;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .results-list {
-    flex: 1;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
-  }
-
-  .results-list::-webkit-scrollbar { width: 4px; }
-  .results-list::-webkit-scrollbar-track { background: transparent; }
-  .results-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  .result-item {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background 0.12s;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
+  .filter-row { display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
+  .filter-chip { font-size: 10px; padding: 2px 8px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; font-family: 'Source Serif 4', serif; transition: all 0.15s; white-space: nowrap; }
+  .filter-chip:hover, .filter-chip.active { background: var(--accent-glow); border-color: var(--accent-dim); color: var(--accent); }
+  .results-header { padding: 7px 12px 5px; font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-dim); font-weight: 300; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .results-list { flex: 1; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+  .results-list::-webkit-scrollbar { width: 3px; }
+  .results-list::-webkit-scrollbar-thumb { background: var(--border); }
+  .result-item { padding: 9px 12px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s; display: flex; align-items: flex-start; gap: 9px; }
   .result-item:hover { background: var(--surface2); }
   .result-item.active { background: var(--accent-glow); border-left: 2px solid var(--accent); }
-
-  .result-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 13px;
-    color: var(--accent-dim);
-    min-width: 28px;
-    padding-top: 1px;
-    font-weight: 400;
-  }
-
+  .result-num { font-family: 'Playfair Display', serif; font-size: 11px; color: var(--accent-dim); min-width: 24px; padding-top: 1px; }
   .result-body { flex: 1; min-width: 0; }
+  .result-title { font-size: 12px; color: var(--text); line-height: 1.35; }
+  .result-title mark { background: var(--accent-glow); color: var(--accent); border-radius: 2px; padding: 0 1px; }
+  .result-meta { font-size: 10px; color: var(--text-muted); margin-top: 2px; font-style: italic; font-weight: 300; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .result-pages { font-size: 10px; color: var(--text-dim); white-space: nowrap; padding-top: 1px; font-family: monospace; }
+  .empty-state { padding: 40px 20px; text-align: center; color: var(--text-dim); font-style: italic; font-size: 13px; font-weight: 300; }
 
-  .result-title {
-    font-size: 14px;
-    color: var(--text);
-    line-height: 1.35;
-    font-weight: 400;
+  /* RIGHT */
+  .panel-right { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+  .chapter-header { padding: 14px 28px 12px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; display: none; }
+  .chapter-eyebrow { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-dim); margin-bottom: 4px; font-weight: 300; }
+  .chapter-title { font-family: 'Playfair Display', serif; font-size: clamp(15px, 1.8vw, 21px); font-weight: 600; color: var(--text); line-height: 1.25; margin-bottom: 7px; }
+  .chapter-badges { display: flex; gap: 7px; flex-wrap: wrap; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 4px; }
+  .badge-pages { background: var(--accent-glow); color: var(--accent); border: 1px solid var(--accent-dim); font-family: monospace; }
+  .badge-section { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); font-style: italic; font-weight: 300; }
+  .badge-count { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+
+  /* PDF nav */
+  .pdf-nav { padding: 7px 20px; border-bottom: 1px solid var(--border); display: none; align-items: center; gap: 10px; background: var(--surface2); flex-shrink: 0; flex-wrap: wrap; }
+  .pdf-nav.visible { display: flex; }
+  .nav-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 5px; padding: 4px 11px; color: var(--text-muted); font-family: 'Source Serif 4', serif; font-size: 12px; cursor: pointer; transition: all 0.15s; }
+  .nav-btn:hover:not(:disabled) { border-color: var(--accent-dim); color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .page-info { font-size: 11px; color: var(--text-muted); font-family: monospace; min-width: 120px; text-align: center; }
+  .nav-spacer { flex: 1; }
+  .zoom-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 5px; padding: 4px 9px; color: var(--text-muted); font-size: 13px; cursor: pointer; transition: all 0.15s; }
+  .zoom-btn:hover { border-color: var(--accent-dim); color: var(--accent); }
+  .zoom-level { font-size: 10px; color: var(--text-dim); font-family: monospace; min-width: 36px; text-align: center; }
+
+  /* PDF canvas */
+  .pdf-viewport { flex: 1; overflow-y: auto; overflow-x: auto; background: #181816; display: none; flex-direction: column; align-items: center; padding: 20px 12px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+  .pdf-viewport::-webkit-scrollbar { width: 5px; }
+  .pdf-viewport::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  #pdfCanvas { box-shadow: 0 6px 32px rgba(0,0,0,0.6); display: block; max-width: 100%; }
+
+  /* States */
+  .welcome-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); text-align: center; padding: 40px; gap: 10px; }
+  .welcome-ornament { font-size: 48px; opacity: 0.1; margin-bottom: 6px; }
+  .welcome-title { font-family: 'Playfair Display', serif; font-size: 19px; color: var(--text-muted); font-weight: 400; }
+  .welcome-text { font-size: 13px; font-weight: 300; font-style: italic; color: var(--text-dim); max-width: 300px; line-height: 1.6; }
+  .loading-state { flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--text-muted); }
+  .spinner { width: 32px; height: 32px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 13px; font-style: italic; font-weight: 300; }
+  .error-state { flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--text-muted); text-align: center; padding: 40px; }
+  .error-icon { font-size: 32px; opacity: 0.35; }
+  .error-text { font-size: 13px; font-style: italic; font-weight: 300; max-width: 340px; line-height: 1.6; }
+
+  @media (max-width: 640px) {
+    .app { flex-direction: column; }
+    .panel-left { width: 100%; height: 38vh; border-right: none; border-bottom: 1px solid var(--border); }
   }
-
-  .result-title mark {
-    background: var(--accent-glow);
-    color: var(--accent);
-    border-radius: 2px;
-    padding: 0 1px;
-  }
-
-  .result-meta {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 3px;
-    font-style: italic;
-    font-weight: 300;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .result-pages {
-    font-size: 11px;
-    color: var(--text-dim);
-    white-space: nowrap;
-    padding-top: 2px;
-    font-family: monospace;
-  }
-
-  .empty-state {
-    padding: 60px 24px;
-    text-align: center;
-    color: var(--text-dim);
-    font-style: italic;
-    font-size: 14px;
-    font-weight: 300;
-  }
-
-  .empty-state .empty-icon {
-    font-size: 32px;
-    margin-bottom: 12px;
-    opacity: 0.4;
-  }
-
-  /* ── RIGHT PANEL ── */
-  .panel-right {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .chapter-header {
-    padding: 28px 40px 24px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-    min-height: 130px;
-  }
-
-  .chapter-eyebrow {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent-dim);
-    margin-bottom: 8px;
-    font-weight: 300;
-  }
-
-  .chapter-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(20px, 2.5vw, 28px);
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.25;
-    margin-bottom: 10px;
-  }
-
-  .chapter-badges {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .badge {
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 4px;
-    font-weight: 400;
-    font-family: 'Source Serif 4', serif;
-  }
-
-  .badge-pages {
-    background: var(--accent-glow);
-    color: var(--accent);
-    border: 1px solid var(--accent-dim);
-    font-family: monospace;
-    font-size: 12px;
-  }
-
-  .badge-section {
-    background: var(--surface2);
-    color: var(--text-muted);
-    border: 1px solid var(--border);
-    font-style: italic;
-    font-weight: 300;
-  }
-
-  .badge-count {
-    background: var(--surface2);
-    color: var(--text-muted);
-    border: 1px solid var(--border);
-  }
-
-  /* PDF viewer area */
-  .pdf-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .pdf-toolbar {
-    padding: 10px 24px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--surface2);
-    flex-wrap: wrap;
-  }
-
-  .pdf-toolbar-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-style: italic;
-    font-weight: 300;
-  }
-
-  .pdf-path-input {
-    flex: 1;
-    min-width: 200px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 6px 10px;
-    color: var(--text);
-    font-family: monospace;
-    font-size: 12px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .pdf-path-input:focus { border-color: var(--accent-dim); }
-
-  .open-pdf-btn {
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
-    border-radius: 4px;
-    padding: 7px 16px;
-    font-family: 'Source Serif 4', serif;
-    font-size: 13px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: opacity 0.15s;
-    white-space: nowrap;
-  }
-
-  .open-pdf-btn:hover { opacity: 0.85; }
-
-  .pdf-viewer {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-  }
-
-  #pdfFrame {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: none;
-  }
-
-  .pdf-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: var(--text-dim);
-    text-align: center;
-    padding: 40px;
-    gap: 16px;
-  }
-
-  .placeholder-ornament {
-    font-size: 48px;
-    opacity: 0.2;
-  }
-
-  .placeholder-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    color: var(--text-muted);
-    font-weight: 400;
-  }
-
-  .placeholder-text {
-    font-size: 14px;
-    font-weight: 300;
-    font-style: italic;
-    max-width: 420px;
-    line-height: 1.6;
-    color: var(--text-dim);
-  }
-
-  .instruction-block {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 20px 24px;
-    max-width: 480px;
-    text-align: left;
-    margin-top: 8px;
-  }
-
-  .instruction-block h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 15px;
-    color: var(--accent);
-    margin-bottom: 12px;
-    font-weight: 600;
-  }
-
-  .instruction-step {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 10px;
-    font-size: 13px;
-    color: var(--text-muted);
-    font-weight: 300;
-    line-height: 1.5;
-  }
-
-  .step-num {
-    color: var(--accent-dim);
-    font-family: 'Playfair Display', serif;
-    font-size: 15px;
-    min-width: 20px;
-  }
-
-  /* Welcome / no selection state */
-  .welcome-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: var(--text-dim);
-    text-align: center;
-    padding: 40px;
-    gap: 12px;
-  }
-
-  .welcome-ornament {
-    font-size: 56px;
-    opacity: 0.15;
-    margin-bottom: 8px;
-  }
-
-  .welcome-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color: var(--text-muted);
-    font-weight: 400;
-  }
-
-  .welcome-text {
-    font-size: 14px;
-    font-weight: 300;
-    font-style: italic;
-    color: var(--text-dim);
-    max-width: 360px;
-    line-height: 1.6;
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 700px) {
-    header { padding: 20px 20px 16px; }
-    .app { flex-direction: column; height: auto; min-height: calc(100vh - 100px); }
-    .panel-left { width: 100%; height: 50vh; border-right: none; border-bottom: 1px solid var(--border); }
-    .panel-right { height: 50vh; }
-    .chapter-header { padding: 18px 20px 16px; }
-    .pdf-toolbar { padding: 8px 16px; }
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .fade-in { animation: fadeIn 0.25s ease forwards; }
 </style>
 </head>
 <body>
@@ -570,7 +109,6 @@
   <div class="logo-block">
     <div class="logo-eyebrow">Kucers' The Use of Antibiotics · 7th Edition</div>
     <h1>Antimicrobial <span>Reference</span></h1>
-    <div class="logo-sub">Search 244 drug chapters across antibiotics, antifungals, antiparasitics &amp; antivirals</div>
   </div>
   <div class="stats-row">
     <div class="stat"><div class="stat-n">244</div><div class="stat-label">Chapters</div></div>
@@ -580,14 +118,12 @@
 </header>
 
 <div class="app">
-
-  <!-- LEFT: Search + Results -->
   <div class="panel-left">
     <div class="search-bar">
       <div class="search-wrap">
         <span class="search-icon">⌕</span>
-        <input id="searchInput" type="text" placeholder="Search drug, class, or keyword…" autocomplete="off" spellcheck="false">
-        <button class="clear-btn" id="clearBtn" title="Clear">✕</button>
+        <input id="searchInput" type="text" placeholder="Search drug, class, keyword…" autocomplete="off" spellcheck="false">
+        <button class="clear-btn" id="clearBtn">✕</button>
       </div>
       <div class="filter-row" id="filterRow">
         <button class="filter-chip active" data-section="all">All</button>
@@ -597,247 +133,145 @@
         <button class="filter-chip" data-section="antiviral">Antiviral</button>
       </div>
     </div>
-
     <div class="results-header" id="resultsHeader">244 entries</div>
-
     <div class="results-list" id="resultsList"></div>
   </div>
 
-  <!-- RIGHT: Chapter detail + PDF viewer -->
   <div class="panel-right">
-
-    <div id="chapterHeader" class="chapter-header" style="display:none">
+    <div class="chapter-header" id="chapterHeader">
       <div class="chapter-eyebrow" id="chapterEyebrow"></div>
       <div class="chapter-title" id="chapterTitle"></div>
       <div class="chapter-badges" id="chapterBadges"></div>
     </div>
-
-    <div id="welcomeState" class="welcome-state">
+    <div class="pdf-nav" id="pdfNav">
+      <button class="nav-btn" id="prevBtn">← Prev</button>
+      <span class="page-info" id="pageInfo">—</span>
+      <button class="nav-btn" id="nextBtn">Next →</button>
+      <div class="nav-spacer"></div>
+      <button class="zoom-btn" id="zoomOut">−</button>
+      <span class="zoom-level" id="zoomLevel">140%</span>
+      <button class="zoom-btn" id="zoomIn">+</button>
+    </div>
+    <div class="welcome-state" id="welcomeState">
       <div class="welcome-ornament">☤</div>
       <div class="welcome-title">Select a chapter</div>
-      <div class="welcome-text">Search or browse the list on the left to open a drug chapter from Kucers' reference.</div>
+      <div class="welcome-text">Search or browse the list to open a drug chapter directly in this page.</div>
     </div>
-
-    <div class="pdf-area" id="pdfArea" style="display:none">
-      <div class="pdf-toolbar">
-        <span class="pdf-toolbar-label">PDF file path:</span>
-        <input class="pdf-path-input" id="pdfPath" type="text" value="https://abstract77.github.io/antibiotic-reference/kucer.pdf" />
-        <button class="open-pdf-btn" id="openPdfBtn">Open chapter ↗</button>
-      </div>
-
-      <div class="pdf-viewer">
-        <iframe id="pdfFrame"></iframe>
-        <div class="pdf-placeholder" id="pdfPlaceholder">
-          <div class="placeholder-ornament">📖</div>
-          <div class="placeholder-title">Open the PDF to read this chapter</div>
-          <div class="placeholder-text">Enter the path to your local PDF file above and click "Open chapter". The browser will open the file at the correct page.</div>
-          <div class="instruction-block">
-            <h3>How to use</h3>
-            <div class="instruction-step"><span class="step-num">1</span><span>Enter the full path to your PDF file in the field above (you can drag the file into the field on most browsers).</span></div>
-            <div class="instruction-step"><span class="step-num">2</span><span>Click <strong>Open chapter ↗</strong> — your browser will open the PDF directly at the correct page.</span></div>
-            <div class="instruction-step"><span class="step-num">3</span><span>If you're hosting the PDF on a web server, enter the URL (http/https) instead of a local path.</span></div>
-          </div>
-        </div>
-      </div>
+    <div class="loading-state" id="loadingState">
+      <div class="spinner"></div>
+      <div class="loading-text" id="loadingText">Loading…</div>
     </div>
-
+    <div class="error-state" id="errorState">
+      <div class="error-icon">⚠</div>
+      <div class="error-text" id="errorText">Could not load the PDF.</div>
+    </div>
+    <div class="pdf-viewport" id="pdfViewport">
+      <canvas id="pdfCanvas"></canvas>
+    </div>
   </div>
 </div>
 
 <script>
-// ── DATA: generated from index.json ────────────────────────────────────────
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const PDF_URL = 'https://pub-9d69cbf59b6447f293169d48cc7dbfda.r2.dev/kucer.pdf';
+
 const CHAPTERS = [{"titel":"3: Benzylpenicillin (Penicillin G)","nivå":4,"start_sida":76,"slut_sida":144,"antal_sidor":69,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"4: Phenoxypenicillins","nivå":4,"start_sida":145,"slut_sida":152,"antal_sidor":8,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"5: Ampicillin and Amoxicillin","nivå":4,"start_sida":153,"slut_sida":188,"antal_sidor":36,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"6: Methicillin","nivå":4,"start_sida":189,"slut_sida":195,"antal_sidor":7,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"7: Isoxazolyl Penicillins: Oxacillin, Cloxacillin, Dicloxacillin, and Flucloxacillin","nivå":4,"start_sida":196,"slut_sida":214,"antal_sidor":19,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"8: Nafcillin","nivå":4,"start_sida":215,"slut_sida":225,"antal_sidor":11,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"9: Carbenicillin, Carindacillin, Carfecillin, and Ticarcillin","nivå":4,"start_sida":226,"slut_sida":239,"antal_sidor":14,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"10: Mezlocillin, Azlocillin, Apalcillin, and Piperacillin","nivå":4,"start_sida":240,"slut_sida":259,"antal_sidor":20,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"11: Mecillinam (Amdinocillin) and Pivmecillinam","nivå":4,"start_sida":260,"slut_sida":270,"antal_sidor":11,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"12: Temocillin","nivå":4,"start_sida":271,"slut_sida":277,"antal_sidor":7,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"13: Beta-Lactamase Inhibitors","nivå":4,"start_sida":278,"slut_sida":306,"antal_sidor":29,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"14: Amoxicillin–Clavulanic Acid","nivå":4,"start_sida":307,"slut_sida":332,"antal_sidor":26,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"15: Ampicillin–Sulbactam","nivå":4,"start_sida":333,"slut_sida":351,"antal_sidor":19,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"16: Ticarcillin–Clavulanic Acid","nivå":4,"start_sida":352,"slut_sida":371,"antal_sidor":20,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"17: Piperacillin–Tazobactam","nivå":4,"start_sida":372,"slut_sida":397,"antal_sidor":26,"section":"Section 2: ANTIBIOTICS","part":"Part 2:1: PENICILLINS AND RELATED DRUGS"},{"titel":"18: Cephalothin and Cefazolin","nivå":4,"start_sida":400,"slut_sida":413,"antal_sidor":14,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"19: Cephalexin","nivå":4,"start_sida":414,"slut_sida":422,"antal_sidor":9,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"20: Cephadroxil, Cephaloridine, Cephacetrile, Cephapirin, Cephradine, and Other Rarely Used First-Generation Cephalosporins","nivå":4,"start_sida":423,"slut_sida":428,"antal_sidor":6,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"21: Cefaclor, Cefprozil, and Loracarbef","nivå":4,"start_sida":429,"slut_sida":435,"antal_sidor":7,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"22: Cefuroxime","nivå":4,"start_sida":436,"slut_sida":448,"antal_sidor":13,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"23: Cefotiam, Cefuzonam, Cefamandole, Cefonicid, and Ceforanide","nivå":4,"start_sida":449,"slut_sida":455,"antal_sidor":7,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"24: Cefoxitin, Cefotetan, and Other Cephamycins","nivå":4,"start_sida":456,"slut_sida":467,"antal_sidor":12,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"25: Cefoperazone and Cefoperazone–Sulbactam","nivå":4,"start_sida":468,"slut_sida":478,"antal_sidor":11,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"26: Cefotaxime","nivå":4,"start_sida":479,"slut_sida":516,"antal_sidor":38,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"27: Ceftriaxone","nivå":4,"start_sida":517,"slut_sida":582,"antal_sidor":66,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"28: Ceftizoxime, Cefdinir, Cefditoren, Cefpodoxime, Ceftibuten, Cefsulodin, and Cefpiramide","nivå":4,"start_sida":583,"slut_sida":591,"antal_sidor":9,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"29: Cefixime","nivå":4,"start_sida":592,"slut_sida":600,"antal_sidor":9,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"30: Ceftazidime and Ceftazidime–Avibactam","nivå":4,"start_sida":601,"slut_sida":630,"antal_sidor":30,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"31: Cefepime, Cefpirome, and Cefepime–Tazobactam","nivå":4,"start_sida":631,"slut_sida":655,"antal_sidor":25,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"32: Ceftaroline and Ceftaroline–Avibactam","nivå":4,"start_sida":656,"slut_sida":671,"antal_sidor":16,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"33: Ceftobiprole","nivå":4,"start_sida":672,"slut_sida":688,"antal_sidor":17,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"34: Ceftolozane–Tazobactam","nivå":4,"start_sida":689,"slut_sida":696,"antal_sidor":8,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"35: Aztreonam and Aztreonam–Avibactam","nivå":4,"start_sida":697,"slut_sida":710,"antal_sidor":14,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"36: Cefiderocol (S-649266)","nivå":4,"start_sida":711,"slut_sida":713,"antal_sidor":3,"section":"Section 2: ANTIBIOTICS","part":"Part 2:2: CEPHALOSPORINS AND RELATED DRUGS"},{"titel":"37: Imipenem–Cilastatin and Imipenem–Relebactam","nivå":4,"start_sida":716,"slut_sida":749,"antal_sidor":34,"section":"Section 2: ANTIBIOTICS","part":"Part 2:3: CARBAPENEMS"},{"titel":"38: Meropenem and Meropenem–Vaborbactam","nivå":4,"start_sida":750,"slut_sida":775,"antal_sidor":26,"section":"Section 2: ANTIBIOTICS","part":"Part 2:3: CARBAPENEMS"},{"titel":"39: Doripenem","nivå":4,"start_sida":776,"slut_sida":795,"antal_sidor":20,"section":"Section 2: ANTIBIOTICS","part":"Part 2:3: CARBAPENEMS"},{"titel":"40: Ertapenem","nivå":4,"start_sida":796,"slut_sida":817,"antal_sidor":22,"section":"Section 2: ANTIBIOTICS","part":"Part 2:3: CARBAPENEMS"},{"titel":"41: Faropenem","nivå":4,"start_sida":818,"slut_sida":824,"antal_sidor":7,"section":"Section 2: ANTIBIOTICS","part":"Part 2:3: CARBAPENEMS"},{"titel":"42: Biapenem, Ritipenem, Panipenem, and Sulopenem","nivå":4,"start_sida":825,"slut_sida":835,"antal_sidor":11,"section":"Section 2: ANTIBIOTICS","part":"Part 2:3: CARBAPENEMS"},{"titel":"43: Vancomycin","nivå":4,"start_sida":838,"slut_sida":888,"antal_sidor":51,"section":"Section 2: ANTIBIOTICS","part":"Part 2:4: GLYCOPEPTIDES AND LIPOPEPTIDES"},{"titel":"44: Teicoplanin","nivå":4,"start_sida":889,"slut_sida":918,"antal_sidor":30,"section":"Section 2: ANTIBIOTICS","part":"Part 2:4: GLYCOPEPTIDES AND LIPOPEPTIDES"},{"titel":"45: Daptomycin","nivå":4,"start_sida":919,"slut_sida":960,"antal_sidor":42,"section":"Section 2: ANTIBIOTICS","part":"Part 2:4: GLYCOPEPTIDES AND LIPOPEPTIDES"},{"titel":"46: Oritavancin","nivå":4,"start_sida":961,"slut_sida":969,"antal_sidor":9,"section":"Section 2: ANTIBIOTICS","part":"Part 2:4: GLYCOPEPTIDES AND LIPOPEPTIDES"},{"titel":"47: Dalbavancin","nivå":4,"start_sida":970,"slut_sida":982,"antal_sidor":13,"section":"Section 2: ANTIBIOTICS","part":"Part 2:4: GLYCOPEPTIDES AND LIPOPEPTIDES"},{"titel":"48: Telavancin","nivå":4,"start_sida":983,"slut_sida":992,"antal_sidor":10,"section":"Section 2: ANTIBIOTICS","part":"Part 2:4: GLYCOPEPTIDES AND LIPOPEPTIDES"},{"titel":"49: Ramoplanin","nivå":4,"start_sida":993,"slut_sida":996,"antal_sidor":4,"section":"Section 2: ANTIBIOTICS","part":"Part 2:4: GLYCOPEPTIDES AND LIPOPEPTIDES"},{"titel":"50: Surotomycin","nivå":4,"start_sida":997,"slut_sida":999,"antal_sidor":3,"section":"Section 2: ANTIBIOTICS","part":"Part 2:4: GLYCOPEPTIDES AND LIPOPEPTIDES"},{"titel":"51: Kanamycin","nivå":4,"start_sida":1002,"slut_sida":1016,"antal_sidor":15,"section":"Section 2: ANTIBIOTICS","part":"Part 2:5: AMINOGLYCOSIDES"},{"titel":"52: Gentamicin","nivå":4,"start_sida":1017,"slut_sida":1044,"antal_sidor":28,"section":"Section 2: ANTIBIOTICS","part":"Part 2:5: AMINOGLYCOSIDES"},{"titel":"53: Tobramycin","nivå":4,"start_sida":1045,"slut_sida":1061,"antal_sidor":17,"section":"Section 2: ANTIBIOTICS","part":"Part 2:5: AMINOGLYCOSIDES"},{"titel":"54: Amikacin","nivå":4,"start_sida":1062,"slut_sida":1080,"antal_sidor":19,"section":"Section 2: ANTIBIOTICS","part":"Part 2:5: AMINOGLYCOSIDES"},{"titel":"55: Sisomicin and Netilmicin","nivå":4,"start_sida":1081,"slut_sida":1091,"antal_sidor":11,"section":"Section 2: ANTIBIOTICS","part":"Part 2:5: AMINOGLYCOSIDES"},{"titel":"56: Isepamicin","nivå":4,"start_sida":1092,"slut_sida":1098,"antal_sidor":7,"section":"Section 2: ANTIBIOTICS","part":"Part 2:5: AMINOGLYCOSIDES"},{"titel":"57: Neomycin","nivå":4,"start_sida":1099,"slut_sida":1105,"antal_sidor":7,"section":"Section 2: ANTIBIOTICS","part":"Part 2:5: AMINOGLYCOSIDES"},{"titel":"58: Plazomicin","nivå":4,"start_sida":1106,"slut_sida":1115,"antal_sidor":10,"section":"Section 2: ANTIBIOTICS","part":"Part 2:5: AMINOGLYCOSIDES"},{"titel":"59: Erythromycin","nivå":4,"start_sida":1118,"slut_sida":1139,"antal_sidor":22,"section":"Section 2: ANTIBIOTICS","part":"Part 2:6: MACROLIDES AND KETOLIDES"},{"titel":"60: Roxithromycin","nivå":4,"start_sida":1140,"slut_sida":1149,"antal_sidor":10,"section":"Section 2: ANTIBIOTICS","part":"Part 2:6: MACROLIDES AND KETOLIDES"},{"titel":"61: Clarithromycin","nivå":4,"start_sida":1150,"slut_sida":1174,"antal_sidor":25,"section":"Section 2: ANTIBIOTICS","part":"Part 2:6: MACROLIDES AND KETOLIDES"},{"titel":"62: Azithromycin","nivå":4,"start_sida":1175,"slut_sida":1202,"antal_sidor":28,"section":"Section 2: ANTIBIOTICS","part":"Part 2:6: MACROLIDES AND KETOLIDES"},{"titel":"63: Josamycin and Rosaramicin","nivå":4,"start_sida":1203,"slut_sida":1208,"antal_sidor":6,"section":"Section 2: ANTIBIOTICS","part":"Part 2:6: MACROLIDES AND KETOLIDES"},{"titel":"64: Telithromycin","nivå":4,"start_sida":1209,"slut_sida":1224,"antal_sidor":16,"section":"Section 2: ANTIBIOTICS","part":"Part 2:6: MACROLIDES AND KETOLIDES"},{"titel":"65: Cethromycin","nivå":4,"start_sida":1225,"slut_sida":1231,"antal_sidor":7,"section":"Section 2: ANTIBIOTICS","part":"Part 2:6: MACROLIDES AND KETOLIDES"},{"titel":"66: Solithromycin","nivå":4,"start_sida":1232,"slut_sida":1245,"antal_sidor":14,"section":"Section 2: ANTIBIOTICS","part":"Part 2:6: MACROLIDES AND KETOLIDES"},{"titel":"67: Tetracycline","nivå":4,"start_sida":1248,"slut_sida":1256,"antal_sidor":9,"section":"Section 2: ANTIBIOTICS","part":"Part 2:7: TETRACYCLINES AND RELATED DRUGS"},{"titel":"68: Doxycycline","nivå":4,"start_sida":1257,"slut_sida":1282,"antal_sidor":26,"section":"Section 2: ANTIBIOTICS","part":"Part 2:7: TETRACYCLINES AND RELATED DRUGS"},{"titel":"69: Minocycline","nivå":4,"start_sida":1283,"slut_sida":1301,"antal_sidor":19,"section":"Section 2: ANTIBIOTICS","part":"Part 2:7: TETRACYCLINES AND RELATED DRUGS"},{"titel":"70: Tigecycline","nivå":4,"start_sida":1302,"slut_sida":1319,"antal_sidor":18,"section":"Section 2: ANTIBIOTICS","part":"Part 2:7: TETRACYCLINES AND RELATED DRUGS"},{"titel":"71: Omadacycline","nivå":4,"start_sida":1320,"slut_sida":1325,"antal_sidor":6,"section":"Section 2: ANTIBIOTICS","part":"Part 2:7: TETRACYCLINES AND RELATED DRUGS"},{"titel":"72: Eravacycline","nivå":4,"start_sida":1326,"slut_sida":1343,"antal_sidor":18,"section":"Section 2: ANTIBIOTICS","part":"Part 2:7: TETRACYCLINES AND RELATED DRUGS"},{"titel":"73: Linezolid","nivå":4,"start_sida":1346,"slut_sida":1400,"antal_sidor":55,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"74: Cadazolid","nivå":4,"start_sida":1401,"slut_sida":1406,"antal_sidor":6,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"75: Radezolid","nivå":4,"start_sida":1407,"slut_sida":1408,"antal_sidor":2,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"76: Tedizolid","nivå":4,"start_sida":1409,"slut_sida":1426,"antal_sidor":18,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"77: Quinupristin–Dalfopristin","nivå":4,"start_sida":1427,"slut_sida":1438,"antal_sidor":12,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"78: Pristinamycin","nivå":4,"start_sida":1439,"slut_sida":1444,"antal_sidor":6,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"79: Fosfomycin","nivå":4,"start_sida":1445,"slut_sida":1459,"antal_sidor":15,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"80: Fusidate Sodium","nivå":4,"start_sida":1460,"slut_sida":1472,"antal_sidor":13,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"81: Polymyxins","nivå":4,"start_sida":1473,"slut_sida":1502,"antal_sidor":30,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"82: Novobiocin","nivå":4,"start_sida":1503,"slut_sida":1506,"antal_sidor":4,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"83: Bacitracin and Gramicidin","nivå":4,"start_sida":1507,"slut_sida":1512,"antal_sidor":6,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"84: Mupirocin","nivå":4,"start_sida":1513,"slut_sida":1520,"antal_sidor":8,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"85: Clindamycin and Lincomycin","nivå":4,"start_sida":1521,"slut_sida":1567,"antal_sidor":47,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"86: Chloramphenicol and Thiamphenicol","nivå":4,"start_sida":1568,"slut_sida":1594,"antal_sidor":27,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"87: Spectinomycin","nivå":4,"start_sida":1595,"slut_sida":1599,"antal_sidor":5,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"88: Fidaxomicin","nivå":4,"start_sida":1600,"slut_sida":1608,"antal_sidor":9,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"89: Lefamulin","nivå":4,"start_sida":1609,"slut_sida":1613,"antal_sidor":5,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"90: Retapamulin","nivå":4,"start_sida":1614,"slut_sida":1621,"antal_sidor":8,"section":"Section 2: ANTIBIOTICS","part":"Part 2:8: OTHER ANTIBIOTICS"},{"titel":"101: Ciprofloxacin","nivå":4,"start_sida":1920,"slut_sida":2038,"antal_sidor":119,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11A: NEW AND COMMONLY USED FLUOROQUINOLONES"},{"titel":"102: Norfloxacin","nivå":4,"start_sida":2039,"slut_sida":2056,"antal_sidor":18,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11A: NEW AND COMMONLY USED FLUOROQUINOLONES"},{"titel":"103: Ofloxacin","nivå":4,"start_sida":2057,"slut_sida":2107,"antal_sidor":51,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11A: NEW AND COMMONLY USED FLUOROQUINOLONES"},{"titel":"104: Levofloxacin","nivå":4,"start_sida":2108,"slut_sida":2137,"antal_sidor":30,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11A: NEW AND COMMONLY USED FLUOROQUINOLONES"},{"titel":"105: Moxifloxacin","nivå":4,"start_sida":2138,"slut_sida":2162,"antal_sidor":25,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11A: NEW AND COMMONLY USED FLUOROQUINOLONES"},{"titel":"106: Gemifloxacin","nivå":4,"start_sida":2163,"slut_sida":2174,"antal_sidor":12,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11A: NEW AND COMMONLY USED FLUOROQUINOLONES"},{"titel":"107: Sitafloxacin","nivå":4,"start_sida":2175,"slut_sida":2184,"antal_sidor":10,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11A: NEW AND COMMONLY USED FLUOROQUINOLONES"},{"titel":"108: Delafloxacin","nivå":4,"start_sida":2185,"slut_sida":2191,"antal_sidor":7,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11A: NEW AND COMMONLY USED FLUOROQUINOLONES"},{"titel":"109: Finafloxacin","nivå":4,"start_sida":2192,"slut_sida":2199,"antal_sidor":8,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11A: NEW AND COMMONLY USED FLUOROQUINOLONES"},{"titel":"110: Prulifloxacin/Ulifloxacin","nivå":4,"start_sida":2200,"slut_sida":2209,"antal_sidor":10,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11A: NEW AND COMMONLY USED FLUOROQUINOLONES"},{"titel":"111: Avarofloxacin, Nemonoxacin, and Zabofloxacin","nivå":4,"start_sida":2210,"slut_sida":2221,"antal_sidor":12,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11A: NEW AND COMMONLY USED FLUOROQUINOLONES"},{"titel":"112: Enoxacin","nivå":4,"start_sida":2224,"slut_sida":2232,"antal_sidor":9,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11B: OLDER, RARELY USED QUINOLONES AND FLUOROQUINOLONES"},{"titel":"113: Fleroxacin","nivå":4,"start_sida":2233,"slut_sida":2247,"antal_sidor":15,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11B: OLDER, RARELY USED QUINOLONES AND FLUOROQUINOLONES"},{"titel":"114: Garenoxacin","nivå":4,"start_sida":2248,"slut_sida":2265,"antal_sidor":18,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11B: OLDER, RARELY USED QUINOLONES AND FLUOROQUINOLONES"},{"titel":"115: Gatifloxacin","nivå":4,"start_sida":2266,"slut_sida":2297,"antal_sidor":32,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11B: OLDER, RARELY USED QUINOLONES AND FLUOROQUINOLONES"},{"titel":"116: Lomefloxacin","nivå":4,"start_sida":2298,"slut_sida":2306,"antal_sidor":9,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11B: OLDER, RARELY USED QUINOLONES AND FLUOROQUINOLONES"},{"titel":"117: Nalidixic Acid and Other Quinolones","nivå":4,"start_sida":2307,"slut_sida":2329,"antal_sidor":23,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11B: OLDER, RARELY USED QUINOLONES AND FLUOROQUINOLONES"},{"titel":"118: Pefloxacin","nivå":4,"start_sida":2330,"slut_sida":2342,"antal_sidor":13,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11B: OLDER, RARELY USED QUINOLONES AND FLUOROQUINOLONES"},{"titel":"119: Rufloxacin","nivå":4,"start_sida":2343,"slut_sida":2346,"antal_sidor":4,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11B: OLDER, RARELY USED QUINOLONES AND FLUOROQUINOLONES"},{"titel":"120: Sparfloxacin","nivå":4,"start_sida":2347,"slut_sida":2356,"antal_sidor":10,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11B: OLDER, RARELY USED QUINOLONES AND FLUOROQUINOLONES"},{"titel":"121: Tosufloxacin","nivå":4,"start_sida":2357,"slut_sida":2361,"antal_sidor":5,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11B: OLDER, RARELY USED QUINOLONES AND FLUOROQUINOLONES"},{"titel":"122: Discontinued Fluoroquinolones","nivå":4,"start_sida":2362,"slut_sida":2371,"antal_sidor":10,"section":"Part 2:11: QUINOLONES AND FLUOROQUINOLONES","part":"2:11B: OLDER, RARELY USED QUINOLONES AND FLUOROQUINOLONES"},{"titel":"141: Amphotericin B Deoxycholate","nivå":4,"start_sida":2622,"slut_sida":2664,"antal_sidor":43,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:1: POLYENES"},{"titel":"142: Liposomal Amphotericin B","nivå":4,"start_sida":2665,"slut_sida":2680,"antal_sidor":16,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:1: POLYENES"},{"titel":"143: Amphotericin B Lipid Complex (ABLC)","nivå":4,"start_sida":2681,"slut_sida":2698,"antal_sidor":18,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:1: POLYENES"},{"titel":"144: Nystatin","nivå":4,"start_sida":2699,"slut_sida":2705,"antal_sidor":7,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:1: POLYENES"},{"titel":"145: Natamycin","nivå":4,"start_sida":2706,"slut_sida":2709,"antal_sidor":4,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:1: POLYENES"},{"titel":"146: Caspofungin","nivå":4,"start_sida":2712,"slut_sida":2733,"antal_sidor":22,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:2: ECHINOCANDINS"},{"titel":"147: Micafungin","nivå":4,"start_sida":2734,"slut_sida":2745,"antal_sidor":12,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:2: ECHINOCANDINS"},{"titel":"148: Anidulafungin","nivå":4,"start_sida":2746,"slut_sida":2759,"antal_sidor":14,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:2: ECHINOCANDINS"},{"titel":"149: Terbinafine","nivå":4,"start_sida":2762,"slut_sida":2772,"antal_sidor":11,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:3: ALLYLAMINES AND BENZYLAMINE DERIVATIVES"},{"titel":"150: Butenafine","nivå":4,"start_sida":2773,"slut_sida":2777,"antal_sidor":5,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:3: ALLYLAMINES AND BENZYLAMINE DERIVATIVES"},{"titel":"151: Naftifine","nivå":4,"start_sida":2778,"slut_sida":2781,"antal_sidor":4,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:3: ALLYLAMINES AND BENZYLAMINE DERIVATIVES"},{"titel":"152: Ketoconazole","nivå":4,"start_sida":2784,"slut_sida":2808,"antal_sidor":25,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:4: SYSTEMIC AZOLES"},{"titel":"153: Fluconazole","nivå":4,"start_sida":2809,"slut_sida":2838,"antal_sidor":30,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:4: SYSTEMIC AZOLES"},{"titel":"154: Itraconazole","nivå":4,"start_sida":2839,"slut_sida":2864,"antal_sidor":26,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:4: SYSTEMIC AZOLES"},{"titel":"155: Miconazole","nivå":4,"start_sida":2865,"slut_sida":2875,"antal_sidor":11,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:4: SYSTEMIC AZOLES"},{"titel":"156: Voriconazole","nivå":4,"start_sida":2876,"slut_sida":2895,"antal_sidor":20,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:4: SYSTEMIC AZOLES"},{"titel":"157: Posaconazole","nivå":4,"start_sida":2896,"slut_sida":2910,"antal_sidor":15,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:4: SYSTEMIC AZOLES"},{"titel":"158: Isavuconazole","nivå":4,"start_sida":2911,"slut_sida":2922,"antal_sidor":12,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:4: SYSTEMIC AZOLES"},{"titel":"159: Albaconazole","nivå":4,"start_sida":2923,"slut_sida":2928,"antal_sidor":6,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:4: SYSTEMIC AZOLES"},{"titel":"160: Ravuconazole","nivå":4,"start_sida":2929,"slut_sida":2935,"antal_sidor":7,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:4: SYSTEMIC AZOLES"},{"titel":"161: Topical Azoles","nivå":4,"start_sida":2938,"slut_sida":2951,"antal_sidor":14,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:5: TOPICAL AZOLES"},{"titel":"162: Tolnaftate","nivå":4,"start_sida":2954,"slut_sida":2956,"antal_sidor":3,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:6: TOPICAL AGENTS—THIOCARBOMATES, HYDROXYPYRIDONES, AND MORPHOLINE"},{"titel":"163: Amorolfine","nivå":4,"start_sida":2957,"slut_sida":2961,"antal_sidor":5,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:6: TOPICAL AGENTS—THIOCARBOMATES, HYDROXYPYRIDONES, AND MORPHOLINE"},{"titel":"164: Ciclopirox","nivå":4,"start_sida":2962,"slut_sida":2966,"antal_sidor":5,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:6: TOPICAL AGENTS—THIOCARBOMATES, HYDROXYPYRIDONES, AND MORPHOLINE"},{"titel":"165: Rilopirox","nivå":4,"start_sida":2967,"slut_sida":2969,"antal_sidor":3,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:6: TOPICAL AGENTS—THIOCARBOMATES, HYDROXYPYRIDONES, AND MORPHOLINE"},{"titel":"166: Flucytosine (5-Fluorocytosine; 5-FC)","nivå":4,"start_sida":2972,"slut_sida":2979,"antal_sidor":8,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:7: OTHER ANTIFUNGAL AGENTS"},{"titel":"167: Griseofulvin","nivå":4,"start_sida":2980,"slut_sida":2985,"antal_sidor":6,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:7: OTHER ANTIFUNGAL AGENTS"},{"titel":"168: Haloprogin","nivå":4,"start_sida":2986,"slut_sida":2989,"antal_sidor":4,"section":"Section 3: ANTIFUNGAL DRUGS","part":"Part 3:7: OTHER ANTIFUNGAL AGENTS"},{"titel":"169: Artemisinins","nivå":4,"start_sida":2994,"slut_sida":3016,"antal_sidor":23,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"170: Artesunate","nivå":4,"start_sida":3017,"slut_sida":3026,"antal_sidor":10,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"171: Artemether–Lumefantrine","nivå":4,"start_sida":3027,"slut_sida":3041,"antal_sidor":15,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"172: Dihydroartemisinin–Piperaquine","nivå":4,"start_sida":3042,"slut_sida":3058,"antal_sidor":17,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"173: Pyronaridine–Artesunate","nivå":4,"start_sida":3059,"slut_sida":3071,"antal_sidor":13,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"174: Artemisinin–Naphthoquine","nivå":4,"start_sida":3072,"slut_sida":3082,"antal_sidor":11,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"175: Chloroquine and Hydroxychloroquine","nivå":4,"start_sida":3083,"slut_sida":3101,"antal_sidor":19,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"176: Amodiaquine","nivå":4,"start_sida":3102,"slut_sida":3110,"antal_sidor":9,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"177: Quinine and Quinidine","nivå":4,"start_sida":3111,"slut_sida":3127,"antal_sidor":17,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"178: Mefloquine","nivå":4,"start_sida":3128,"slut_sida":3143,"antal_sidor":16,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"179: Halofantrine","nivå":4,"start_sida":3144,"slut_sida":3149,"antal_sidor":6,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"180: Primaquine","nivå":4,"start_sida":3150,"slut_sida":3162,"antal_sidor":13,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"181: Tafenoquine","nivå":4,"start_sida":3163,"slut_sida":3169,"antal_sidor":7,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"182: Atovaquone","nivå":4,"start_sida":3170,"slut_sida":3179,"antal_sidor":10,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"183: Proguanil and Chlorproguanil","nivå":4,"start_sida":3180,"slut_sida":3188,"antal_sidor":9,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"184: Atovaquone–Proguanil","nivå":4,"start_sida":3189,"slut_sida":3199,"antal_sidor":11,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:1: ANTI-MALARIAL DRUGS"},{"titel":"185: Paromomycin","nivå":4,"start_sida":3202,"slut_sida":3214,"antal_sidor":13,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:2: AGENTS ACTIVE AGAINST INTESTINAL AND EXTRA-INTESTINAL PROTOZOA"},{"titel":"186: Nitazoxanide","nivå":4,"start_sida":3215,"slut_sida":3227,"antal_sidor":13,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:2: AGENTS ACTIVE AGAINST INTESTINAL AND EXTRA-INTESTINAL PROTOZOA"},{"titel":"187: Spiramycin","nivå":4,"start_sida":3228,"slut_sida":3235,"antal_sidor":8,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:2: AGENTS ACTIVE AGAINST INTESTINAL AND EXTRA-INTESTINAL PROTOZOA"},{"titel":"188: Fumagillin","nivå":4,"start_sida":3236,"slut_sida":3239,"antal_sidor":4,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:2: AGENTS ACTIVE AGAINST INTESTINAL AND EXTRA-INTESTINAL PROTOZOA"},{"titel":"189: Furazolidone (Furazolidine)","nivå":4,"start_sida":3240,"slut_sida":3247,"antal_sidor":8,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:2: AGENTS ACTIVE AGAINST INTESTINAL AND EXTRA-INTESTINAL PROTOZOA"},{"titel":"190: Diloxanide Furoate","nivå":4,"start_sida":3248,"slut_sida":3252,"antal_sidor":5,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:2: AGENTS ACTIVE AGAINST INTESTINAL AND EXTRA-INTESTINAL PROTOZOA"},{"titel":"191: Iodoquinol and Quinacrine","nivå":4,"start_sida":3253,"slut_sida":3255,"antal_sidor":3,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:2: AGENTS ACTIVE AGAINST INTESTINAL AND EXTRA-INTESTINAL PROTOZOA"},{"titel":"192: Benznidazole","nivå":4,"start_sida":3258,"slut_sida":3263,"antal_sidor":6,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:3: AGENTS ACTIVE AGAINST AMERICAN TRYPANOSOMIASIS"},{"titel":"193: Nifurtimox","nivå":4,"start_sida":3264,"slut_sida":3275,"antal_sidor":12,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:3: AGENTS ACTIVE AGAINST AMERICAN TRYPANOSOMIASIS"},{"titel":"194: Suramin","nivå":4,"start_sida":3278,"slut_sida":3289,"antal_sidor":12,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:4: AGENTS ACTIVE AGAINST AFRICAN TRYPANOSOMIASIS"},{"titel":"195: Melarsoprol","nivå":4,"start_sida":3290,"slut_sida":3305,"antal_sidor":16,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:4: AGENTS ACTIVE AGAINST AFRICAN TRYPANOSOMIASIS"},{"titel":"196: Eflornithine","nivå":4,"start_sida":3306,"slut_sida":3321,"antal_sidor":16,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:4: AGENTS ACTIVE AGAINST AFRICAN TRYPANOSOMIASIS"},{"titel":"197: Pentamidine","nivå":4,"start_sida":3324,"slut_sida":3332,"antal_sidor":9,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:5: AGENTS ACTIVE AGAINST LEISHMANIA AND OTHER PATHOGENS"},{"titel":"198: Antimonial Agents","nivå":4,"start_sida":3333,"slut_sida":3344,"antal_sidor":12,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:5: AGENTS ACTIVE AGAINST LEISHMANIA AND OTHER PATHOGENS"},{"titel":"199: Miltefosine","nivå":4,"start_sida":3345,"slut_sida":3363,"antal_sidor":19,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:5: AGENTS ACTIVE AGAINST LEISHMANIA AND OTHER PATHOGENS"},{"titel":"200: Albendazole","nivå":4,"start_sida":3366,"slut_sida":3382,"antal_sidor":17,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:6: AGENTS ACTIVE AGAINST HELMINTHS"},{"titel":"201: Mebendazole","nivå":4,"start_sida":3383,"slut_sida":3390,"antal_sidor":8,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:6: AGENTS ACTIVE AGAINST HELMINTHS"},{"titel":"202: Thiabendazole and Flubendazole","nivå":4,"start_sida":3391,"slut_sida":3399,"antal_sidor":9,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:6: AGENTS ACTIVE AGAINST HELMINTHS"},{"titel":"203: Triclabendazole","nivå":4,"start_sida":3400,"slut_sida":3403,"antal_sidor":4,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:6: AGENTS ACTIVE AGAINST HELMINTHS"},{"titel":"204: Ivermectin and Moxidectin","nivå":4,"start_sida":3404,"slut_sida":3422,"antal_sidor":19,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:6: AGENTS ACTIVE AGAINST HELMINTHS"},{"titel":"205: Diethylcarbamazine","nivå":4,"start_sida":3423,"slut_sida":3433,"antal_sidor":11,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:6: AGENTS ACTIVE AGAINST HELMINTHS"},{"titel":"206: Pyrantel and Oxantel Pamoate","nivå":4,"start_sida":3434,"slut_sida":3437,"antal_sidor":4,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:6: AGENTS ACTIVE AGAINST HELMINTHS"},{"titel":"207: Praziquantel","nivå":4,"start_sida":3438,"slut_sida":3449,"antal_sidor":12,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:6: AGENTS ACTIVE AGAINST HELMINTHS"},{"titel":"208: Oxamniquine and Metrifonate","nivå":4,"start_sida":3450,"slut_sida":3457,"antal_sidor":8,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:6: AGENTS ACTIVE AGAINST HELMINTHS"},{"titel":"209: Niclosamide","nivå":4,"start_sida":3458,"slut_sida":3463,"antal_sidor":6,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:6: AGENTS ACTIVE AGAINST HELMINTHS"},{"titel":"210: Permethrin","nivå":4,"start_sida":3466,"slut_sida":3475,"antal_sidor":10,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:7: AGENTS ACTIVE AGAINST ECTOPARASITES"},{"titel":"211: Lindane and Malathion","nivå":4,"start_sida":3476,"slut_sida":3492,"antal_sidor":17,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:7: AGENTS ACTIVE AGAINST ECTOPARASITES"},{"titel":"212: Crotamiton","nivå":4,"start_sida":3493,"slut_sida":3497,"antal_sidor":5,"section":"Section 4: ANTIPARASITIC DRUGS","part":"Part 4:7: AGENTS ACTIVE AGAINST ECTOPARASITES"},{"titel":"213: Aciclovir and Valaciclovir","nivå":4,"start_sida":3502,"slut_sida":3545,"antal_sidor":44,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:1: AGENTS ACTIVE AGAINST HERPESVIRUSES"},{"titel":"214: Famciclovir and Penciclovir","nivå":4,"start_sida":3546,"slut_sida":3554,"antal_sidor":9,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:1: AGENTS ACTIVE AGAINST HERPESVIRUSES"},{"titel":"215: Ganciclovir and Valganciclovir","nivå":4,"start_sida":3555,"slut_sida":3583,"antal_sidor":29,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:1: AGENTS ACTIVE AGAINST HERPESVIRUSES"},{"titel":"216: Cidofovir and Brincidofovir","nivå":4,"start_sida":3584,"slut_sida":3624,"antal_sidor":41,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:1: AGENTS ACTIVE AGAINST HERPESVIRUSES"},{"titel":"217: Brivudin","nivå":4,"start_sida":3625,"slut_sida":3634,"antal_sidor":10,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:1: AGENTS ACTIVE AGAINST HERPESVIRUSES"},{"titel":"218: Discontinued Herpesvirus Agent: Vidarabine","nivå":4,"start_sida":3635,"slut_sida":3638,"antal_sidor":4,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:1: AGENTS ACTIVE AGAINST HERPESVIRUSES"},{"titel":"219: Foscarnet","nivå":4,"start_sida":3639,"slut_sida":3671,"antal_sidor":33,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:1: AGENTS ACTIVE AGAINST HERPESVIRUSES"},{"titel":"220: Letermovir","nivå":4,"start_sida":3672,"slut_sida":3679,"antal_sidor":8,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:1: AGENTS ACTIVE AGAINST HERPESVIRUSES"},{"titel":"221: Trifluridine (Trifluorothymidine)","nivå":4,"start_sida":3680,"slut_sida":3686,"antal_sidor":7,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:1: AGENTS ACTIVE AGAINST HERPESVIRUSES"},{"titel":"222: Idoxuridine","nivå":4,"start_sida":3687,"slut_sida":3692,"antal_sidor":6,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:1: AGENTS ACTIVE AGAINST HERPESVIRUSES"},{"titel":"223: Maribavir","nivå":4,"start_sida":3693,"slut_sida":3699,"antal_sidor":7,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:1: AGENTS ACTIVE AGAINST HERPESVIRUSES"},{"titel":"224: Fomivirsen","nivå":4,"start_sida":3700,"slut_sida":3705,"antal_sidor":6,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:1: AGENTS ACTIVE AGAINST HERPESVIRUSES"},{"titel":"225: Zidovudine","nivå":5,"start_sida":3710,"slut_sida":3750,"antal_sidor":41,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"226: Didanosine","nivå":5,"start_sida":3751,"slut_sida":3775,"antal_sidor":25,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"227: Zalcitabine","nivå":5,"start_sida":3776,"slut_sida":3781,"antal_sidor":6,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"228: Lamivudine","nivå":5,"start_sida":3782,"slut_sida":3807,"antal_sidor":26,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"229: Stavudine","nivå":5,"start_sida":3808,"slut_sida":3825,"antal_sidor":18,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"230: Abacavir","nivå":5,"start_sida":3826,"slut_sida":3853,"antal_sidor":28,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"231: Emtricitabine","nivå":5,"start_sida":3854,"slut_sida":3875,"antal_sidor":22,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"232: Tenofovir","nivå":5,"start_sida":3876,"slut_sida":3899,"antal_sidor":24,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"235: Nevirapine","nivå":5,"start_sida":3908,"slut_sida":3959,"antal_sidor":52,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"236: Efavirenz","nivå":5,"start_sida":3960,"slut_sida":4011,"antal_sidor":52,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"237: Delavirdine","nivå":5,"start_sida":4012,"slut_sida":4022,"antal_sidor":11,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"238: Etravirine","nivå":5,"start_sida":4023,"slut_sida":4041,"antal_sidor":19,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"239: Rilpivirine","nivå":5,"start_sida":4042,"slut_sida":4069,"antal_sidor":28,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"240: Saquinavir","nivå":5,"start_sida":4072,"slut_sida":4113,"antal_sidor":42,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"241: Indinavir","nivå":5,"start_sida":4114,"slut_sida":4127,"antal_sidor":14,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"242: Nelfinavir","nivå":5,"start_sida":4128,"slut_sida":4139,"antal_sidor":12,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"243: Lopinavir","nivå":5,"start_sida":4140,"slut_sida":4156,"antal_sidor":17,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"244: Fosamprenavir","nivå":5,"start_sida":4157,"slut_sida":4177,"antal_sidor":21,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"245: Darunavir","nivå":5,"start_sida":4178,"slut_sida":4194,"antal_sidor":17,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"246: Atazanavir","nivå":5,"start_sida":4195,"slut_sida":4210,"antal_sidor":16,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"247: Tipranavir","nivå":5,"start_sida":4211,"slut_sida":4232,"antal_sidor":22,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"248: Ritonavir and Cobicistat","nivå":5,"start_sida":4233,"slut_sida":4265,"antal_sidor":33,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"249: Raltegravir","nivå":5,"start_sida":4268,"slut_sida":4294,"antal_sidor":27,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"250: Elvitegravir","nivå":5,"start_sida":4295,"slut_sida":4311,"antal_sidor":17,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"251: Dolutegravir","nivå":5,"start_sida":4312,"slut_sida":4347,"antal_sidor":36,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"252: Enfuvirtide","nivå":5,"start_sida":4350,"slut_sida":4359,"antal_sidor":10,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"253: Maraviroc","nivå":5,"start_sida":4360,"slut_sida":4373,"antal_sidor":14,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:2: AGENTS ACTIVE AGAINST THE HUMAN IMMUNODEFICIENCY VIRUS"},{"titel":"254: Entecavir","nivå":4,"start_sida":4376,"slut_sida":4387,"antal_sidor":12,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:3: AGENTS ACTIVE AGAINST HEPATITIS VIRUSES"},{"titel":"255: Adefovir Dipivoxil","nivå":4,"start_sida":4388,"slut_sida":4397,"antal_sidor":10,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:3: AGENTS ACTIVE AGAINST HEPATITIS VIRUSES"},{"titel":"256: Telbivudine","nivå":4,"start_sida":4398,"slut_sida":4408,"antal_sidor":11,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:3: AGENTS ACTIVE AGAINST HEPATITIS VIRUSES"},{"titel":"259: Ribavirin","nivå":4,"start_sida":4420,"slut_sida":4461,"antal_sidor":42,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:3: AGENTS ACTIVE AGAINST HEPATITIS VIRUSES"},{"titel":"260: Interferon Alpha","nivå":4,"start_sida":4462,"slut_sida":4484,"antal_sidor":23,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:3: AGENTS ACTIVE AGAINST HEPATITIS VIRUSES"},{"titel":"261: Protease, Polymerase and Assembly Inhibitors for the Treatment of Hepatitis C Virus Infection","nivå":4,"start_sida":4485,"slut_sida":4529,"antal_sidor":45,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:3: AGENTS ACTIVE AGAINST HEPATITIS VIRUSES"},{"titel":"262: Sofosbuvir Combined with Ledipasvir, Daclatasvir, or Other Drugs","nivå":4,"start_sida":4530,"slut_sida":4551,"antal_sidor":22,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:3: AGENTS ACTIVE AGAINST HEPATITIS VIRUSES"},{"titel":"263: Ombitasvir Combined with Paritaprevir, Dasabuvir, or Other Drugs","nivå":4,"start_sida":4552,"slut_sida":4562,"antal_sidor":11,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:3: AGENTS ACTIVE AGAINST HEPATITIS VIRUSES"},{"titel":"264: Grazoprevir Combined with Elbasvir or Other Drugs","nivå":4,"start_sida":4563,"slut_sida":4573,"antal_sidor":11,"section":"Section 5: ANTIVIRAL DRUGS","part":"Part 5:3: AGENTS ACTIVE AGAINST HEPATITIS VIRUSES"},{"titel":"265: Amantadine and Rimantadine","nivå":4,"start_sida":4576,"slut_sida":4602,"antal_sidor":27,"section":"Section 5: ANTIVIRAL DRUGS","part":"PART 5:4: AGENTS ACTIVE AGAINST INFLUENZA VIRUSES"},{"titel":"266: Zanamivir, Laninamivir, and Polyvalent Zanamivir Conjugates","nivå":4,"start_sida":4603,"slut_sida":4632,"antal_sidor":30,"section":"Section 5: ANTIVIRAL DRUGS","part":"PART 5:4: AGENTS ACTIVE AGAINST INFLUENZA VIRUSES"},{"titel":"267: Oseltamivir","nivå":4,"start_sida":4633,"slut_sida":4662,"antal_sidor":30,"section":"Section 5: ANTIVIRAL DRUGS","part":"PART 5:4: AGENTS ACTIVE AGAINST INFLUENZA VIRUSES"},{"titel":"268: Peramivir","nivå":4,"start_sida":4663,"slut_sida":4679,"antal_sidor":17,"section":"Section 5: ANTIVIRAL DRUGS","part":"PART 5:4: AGENTS ACTIVE AGAINST INFLUENZA VIRUSES"},{"titel":"269: Investigational Antiviral Drugs","nivå":4,"start_sida":4682,"slut_sida":4699,"antal_sidor":18,"section":"Section 5: ANTIVIRAL DRUGS","part":"PART 5:5: INVESTIGATIONAL ANTIVIRAL DRUGS"}];
 
-// ── SECTION FILTER MAP ──────────────────────────────────────────────────────
-const SECTION_KEYWORDS = {
-  antibiotics:   ['ANTIBIOTICS', 'QUINOLONES'],
-  antifungal:    ['ANTIFUNGAL'],
-  antiparasitic: ['ANTIPARASITIC'],
-  antiviral:     ['ANTIVIRAL']
-};
+const SECTION_KEYWORDS = { antibiotics: ['ANTIBIOTICS','QUINOLONES'], antifungal: ['ANTIFUNGAL'], antiparasitic: ['ANTIPARASITIC'], antiviral: ['ANTIVIRAL'] };
 
-// ── STATE ──────────────────────────────────────────────────────────────────
-let currentFilter = 'all';
-let currentQuery  = '';
-let selectedIdx   = null;
-let pdfPathStored = 'https://abstract77.github.io/antibiotic-reference/kucer.pdf';
+let currentFilter='all', currentQuery='', selectedIdx=null;
+let pdfDoc=null, currentPage=1, chapterStart=1, chapterEnd=1, scale=1.4, renderTask=null;
 
-// ── DOM ────────────────────────────────────────────────────────────────────
-const searchInput   = document.getElementById('searchInput');
-const clearBtn      = document.getElementById('clearBtn');
-const resultsList   = document.getElementById('resultsList');
-const resultsHeader = document.getElementById('resultsHeader');
-const chapterHeader = document.getElementById('chapterHeader');
-const chapterEyebrow= document.getElementById('chapterEyebrow');
-const chapterTitle  = document.getElementById('chapterTitle');
-const chapterBadges = document.getElementById('chapterBadges');
-const welcomeState  = document.getElementById('welcomeState');
-const pdfArea       = document.getElementById('pdfArea');
-const pdfPath       = document.getElementById('pdfPath');
-const openPdfBtn    = document.getElementById('openPdfBtn');
-const pdfFrame      = document.getElementById('pdfFrame');
-const pdfPlaceholder= document.getElementById('pdfPlaceholder');
+const $ = id => document.getElementById(id);
+const searchInput=$('searchInput'), clearBtn=$('clearBtn'), resultsList=$('resultsList'),
+  resultsHeader=$('resultsHeader'), chapterHeader=$('chapterHeader'),
+  chapterEyebrow=$('chapterEyebrow'), chapterTitle=$('chapterTitle'),
+  chapterBadges=$('chapterBadges'), welcomeState=$('welcomeState'),
+  loadingState=$('loadingState'), loadingText=$('loadingText'),
+  errorState=$('errorState'), errorText=$('errorText'),
+  pdfViewport=$('pdfViewport'), pdfCanvas=$('pdfCanvas'),
+  pdfNav=$('pdfNav'), prevBtn=$('prevBtn'), nextBtn=$('nextBtn'),
+  pageInfo=$('pageInfo'), zoomIn=$('zoomIn'), zoomOut=$('zoomOut'), zoomLevel=$('zoomLevel');
 
-// ── SEARCH ─────────────────────────────────────────────────────────────────
-function getFiltered() {
-  let list = CHAPTERS;
-
-  if (currentFilter !== 'all') {
-    const kws = SECTION_KEYWORDS[currentFilter];
-    list = list.filter(c => kws.some(kw => (c.section + c.part).toUpperCase().includes(kw)));
-  }
-
-  if (currentQuery.trim()) {
-    const q = currentQuery.toLowerCase();
-    list = list.filter(c => c.titel.toLowerCase().includes(q) || c.part.toLowerCase().includes(q));
-  }
-
-  return list;
+async function ensurePdf() {
+  if (pdfDoc) return true;
+  try {
+    loadingText.textContent = 'Connecting to PDF…';
+    pdfDoc = await pdfjsLib.getDocument({ url: PDF_URL, rangeChunkSize: 65536 }).promise;
+    return true;
+  } catch(e) { return false; }
 }
 
-function highlight(text, query) {
-  if (!query.trim()) return text;
-  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return text.replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+async function renderPage(n) {
+  if (!pdfDoc) return;
+  if (renderTask) { try { renderTask.cancel(); } catch(e){} }
+  const page = await pdfDoc.getPage(n);
+  const vp = page.getViewport({ scale });
+  pdfCanvas.width = vp.width; pdfCanvas.height = vp.height;
+  renderTask = page.render({ canvasContext: pdfCanvas.getContext('2d'), viewport: vp });
+  try { await renderTask.promise; } catch(e) { if (e.name !== 'RenderingCancelledException') throw e; }
+  currentPage = n;
+  pageInfo.textContent = `Page ${n}  ·  ch. ${n - chapterStart + 1} / ${chapterEnd - chapterStart + 1}`;
+  prevBtn.disabled = n <= chapterStart;
+  nextBtn.disabled = n >= chapterEnd;
+  pdfViewport.scrollTop = 0;
 }
 
-function chapterNum(titel) {
-  const m = titel.match(/^(\d+):/);
-  return m ? m[1] : '—';
-}
-
-function chapterName(titel) {
-  return titel.replace(/^\d+:\s*/, '');
-}
-
-function renderList() {
-  const list = getFiltered();
-  resultsHeader.textContent = list.length === CHAPTERS.length
-    ? `${CHAPTERS.length} entries`
-    : `${list.length} of ${CHAPTERS.length} entries`;
-
-  if (list.length === 0) {
-    resultsList.innerHTML = `<div class="empty-state"><div class="empty-icon">◎</div>No chapters found</div>`;
-    return;
-  }
-
-  resultsList.innerHTML = list.map((c, i) => {
-    const idx   = CHAPTERS.indexOf(c);
-    const active = idx === selectedIdx ? ' active' : '';
-    const name  = highlight(chapterName(c.titel), currentQuery);
-    const part  = c.part.replace(/^Part \d+:\d+[A-Z]?:\s*/i, '').replace(/^PART \d+:\d+[A-Z]?:\s*/i, '');
-    return `<div class="result-item${active}" data-idx="${idx}" style="animation-delay:${Math.min(i*15,300)}ms">
-      <div class="result-num">${chapterNum(c.titel)}</div>
-      <div class="result-body">
-        <div class="result-title">${name}</div>
-        <div class="result-meta">${part}</div>
-      </div>
-      <div class="result-pages">${c.start_sida}</div>
-    </div>`;
-  }).join('');
-
-  resultsList.querySelectorAll('.result-item').forEach(el => {
-    el.addEventListener('click', () => selectChapter(+el.dataset.idx));
-  });
-}
-
-// ── SELECT ─────────────────────────────────────────────────────────────────
-function selectChapter(idx) {
+async function selectChapter(idx) {
   selectedIdx = idx;
   const c = CHAPTERS[idx];
-
-  // Update active state in list
-  resultsList.querySelectorAll('.result-item').forEach(el => {
-    el.classList.toggle('active', +el.dataset.idx === idx);
-  });
-
-  // Show header
-  welcomeState.style.display = 'none';
+  resultsList.querySelectorAll('.result-item').forEach(el => el.classList.toggle('active', +el.dataset.idx === idx));
   chapterHeader.style.display = 'block';
-  pdfArea.style.display = 'flex';
-
-  chapterEyebrow.textContent = c.part.replace(/^(Part|PART)\s+[\d:]+[A-Z]?\s*:\s*/i, '');
-  chapterTitle.textContent   = chapterName(c.titel);
-
-  chapterBadges.innerHTML = `
-    <span class="badge badge-pages">pp. ${c.start_sida}–${c.slut_sida}</span>
-    <span class="badge badge-count">${c.antal_sidor} pages</span>
-    <span class="badge badge-section">${c.section}</span>
-  `;
-
-  // Reset PDF viewer
-  pdfFrame.style.display = 'none';
-  pdfPlaceholder.style.display = 'flex';
-
-  // If path already set, auto-open
-  if (pdfPathStored) openPdf(c);
+  chapterEyebrow.textContent = c.part.replace(/^(Part|PART)\s+[\d:]+[A-Z]?\s*:\s*/i,'');
+  chapterTitle.textContent   = c.titel.replace(/^\d+:\s*/,'');
+  chapterBadges.innerHTML = `<span class="badge badge-pages">pp. ${c.start_sida}–${c.slut_sida}</span><span class="badge badge-count">${c.antal_sidor} pages</span><span class="badge badge-section">${c.section}</span>`;
+  welcomeState.style.display='none'; errorState.style.display='none';
+  pdfViewport.style.display='none'; pdfNav.classList.remove('visible');
+  loadingState.style.display='flex'; loadingText.textContent='Loading chapter…';
+  chapterStart=c.start_sida; chapterEnd=c.slut_sida;
+  const ok = await ensurePdf();
+  loadingState.style.display='none';
+  if (!ok) { errorText.textContent='Could not load the PDF from Cloudflare. Check that the file is uploaded and public access is enabled.'; errorState.style.display='flex'; return; }
+  pdfViewport.style.display='flex'; pdfNav.classList.add('visible');
+  try { await renderPage(chapterStart); }
+  catch(e) { errorText.textContent=`Render error: ${e.message}`; errorState.style.display='flex'; pdfViewport.style.display='none'; pdfNav.classList.remove('visible'); }
 }
 
-// ── PDF ────────────────────────────────────────────────────────────────────
-function openPdf(c) {
-  const raw  = pdfPath.value.trim();
-  if (!raw) { alert('Please enter the path to your PDF file.'); return; }
-  pdfPathStored = raw;
-
-  let url;
-  if (raw.startsWith('http://') || raw.startsWith('https://')) {
-    // Remote URL — use #page anchor
-    url = `${raw}#page=${c.start_sida}`;
-  } else {
-    // Local file — convert backslashes, prepend file://
-    const normalized = raw.replace(/\\/g, '/');
-    const filePath   = normalized.startsWith('/') ? normalized : '/' + normalized;
-    url = `file://${filePath}#page=${c.start_sida}`;
-  }
-
-  // Open in new tab (most browsers block file:// in iframes)
-  window.open(url, '_blank');
-}
-
-openPdfBtn.addEventListener('click', () => {
-  if (selectedIdx === null) { alert('Please select a chapter first.'); return; }
-  openPdf(CHAPTERS[selectedIdx]);
-});
-
-pdfPath.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && selectedIdx !== null) openPdf(CHAPTERS[selectedIdx]);
-});
-
-// ── FILTERS ────────────────────────────────────────────────────────────────
-document.getElementById('filterRow').addEventListener('click', e => {
-  const chip = e.target.closest('.filter-chip');
-  if (!chip) return;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  chip.classList.add('active');
-  currentFilter = chip.dataset.section;
-  renderList();
-});
-
-// ── SEARCH INPUT ───────────────────────────────────────────────────────────
-searchInput.addEventListener('input', () => {
-  currentQuery = searchInput.value;
-  clearBtn.classList.toggle('visible', currentQuery.length > 0);
-  renderList();
-});
-
-clearBtn.addEventListener('click', () => {
-  searchInput.value = '';
-  currentQuery = '';
-  clearBtn.classList.remove('visible');
-  searchInput.focus();
-  renderList();
-});
-
-// ── KEYBOARD ───────────────────────────────────────────────────────────────
+prevBtn.addEventListener('click', () => { if(currentPage>chapterStart) renderPage(currentPage-1); });
+nextBtn.addEventListener('click', () => { if(currentPage<chapterEnd)   renderPage(currentPage+1); });
+zoomIn.addEventListener('click',  () => { scale=Math.min(scale+0.2,3); zoomLevel.textContent=Math.round(scale*100)+'%'; renderPage(currentPage); });
+zoomOut.addEventListener('click', () => { scale=Math.max(scale-0.2,0.6); zoomLevel.textContent=Math.round(scale*100)+'%'; renderPage(currentPage); });
 document.addEventListener('keydown', e => {
-  if (e.key === '/' && document.activeElement !== searchInput) {
-    e.preventDefault();
-    searchInput.focus();
-    searchInput.select();
-  }
+  if (document.activeElement===searchInput) return;
+  if (e.key==='ArrowRight' && currentPage<chapterEnd)   renderPage(currentPage+1);
+  if (e.key==='ArrowLeft'  && currentPage>chapterStart) renderPage(currentPage-1);
+  if (e.key==='/') { e.preventDefault(); searchInput.focus(); }
 });
 
-// ── INIT ───────────────────────────────────────────────────────────────────
+function getFiltered() {
+  let list = CHAPTERS;
+  if (currentFilter!=='all') { const kws=SECTION_KEYWORDS[currentFilter]; list=list.filter(c=>kws.some(kw=>(c.section+c.part).toUpperCase().includes(kw))); }
+  if (currentQuery.trim()) { const q=currentQuery.toLowerCase(); list=list.filter(c=>c.titel.toLowerCase().includes(q)||c.part.toLowerCase().includes(q)); }
+  return list;
+}
+function hi(t,q) { if(!q.trim()) return t; const e=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); return t.replace(new RegExp(`(${e})`,'gi'),'<mark>$1</mark>'); }
+function renderList() {
+  const list=getFiltered();
+  resultsHeader.textContent = list.length===CHAPTERS.length ? `${CHAPTERS.length} entries` : `${list.length} of ${CHAPTERS.length} entries`;
+  if (!list.length) { resultsList.innerHTML=`<div class="empty-state">No chapters found</div>`; return; }
+  resultsList.innerHTML = list.map((c,i)=>{
+    const idx=CHAPTERS.indexOf(c), active=idx===selectedIdx?' active':'';
+    const name=hi(c.titel.replace(/^\d+:\s*/,''),currentQuery);
+    const part=c.part.replace(/^(Part|PART)\s+[\d:]+[A-Z]?\s*:\s*/i,'');
+    return `<div class="result-item${active}" data-idx="${idx}"><div class="result-num">${c.titel.match(/^(\d+)/)?.[1]??'—'}</div><div class="result-body"><div class="result-title">${name}</div><div class="result-meta">${part}</div></div><div class="result-pages">${c.start_sida}</div></div>`;
+  }).join('');
+  resultsList.querySelectorAll('.result-item').forEach(el=>el.addEventListener('click',()=>selectChapter(+el.dataset.idx)));
+}
+$('filterRow').addEventListener('click',e=>{const chip=e.target.closest('.filter-chip');if(!chip)return;document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));chip.classList.add('active');currentFilter=chip.dataset.section;renderList();});
+searchInput.addEventListener('input',()=>{currentQuery=searchInput.value;clearBtn.classList.toggle('visible',currentQuery.length>0);renderList();});
+clearBtn.addEventListener('click',()=>{searchInput.value='';currentQuery='';clearBtn.classList.remove('visible');searchInput.focus();renderList();});
 renderList();
 </script>
 </body>
