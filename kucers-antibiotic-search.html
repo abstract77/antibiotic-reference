@@ -621,7 +621,7 @@
     <div class="pdf-area" id="pdfArea" style="display:none">
       <div class="pdf-toolbar">
         <span class="pdf-toolbar-label">PDF file path:</span>
-        <input class="pdf-path-input" id="pdfPath" type="text" placeholder="e.g. C:\Documents\kucers.pdf  or  /Users/you/kucers.pdf" />
+        <input class="pdf-path-input" id="pdfPath" type="text" value="https://abstract77.github.io/antibiotic-reference/kucer.pdf" />
         <button class="open-pdf-btn" id="openPdfBtn">Open chapter ↗</button>
       </div>
 
@@ -660,7 +660,7 @@ const SECTION_KEYWORDS = {
 let currentFilter = 'all';
 let currentQuery  = '';
 let selectedIdx   = null;
-let pdfPathStored = '';
+let pdfPathStored = 'https://abstract77.github.io/antibiotic-reference/kucer.pdf';
 
 // ── DOM ────────────────────────────────────────────────────────────────────
 const searchInput   = document.getElementById('searchInput');
